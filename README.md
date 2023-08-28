@@ -7,7 +7,7 @@ ADRs.
 ### Issue template
 
 The best way to use the issue template is to copy it from
-[`adr-issue-template.yaml`](blob/main/adr-issue-template.yaml) into the
+[`adr-issue-template.yaml`](/adr-issue-template.yaml) into the
 `.github/ISSUE_TEMPLATES/` of your repository. If you want to use a different
 label to identify your ADRs, modify that file.
 
