@@ -4,6 +4,9 @@ This repo has two GitHub Actions to help with creating architectural decision
 records (ADRs). There is also an issue template to help teams draft consistent
 ADRs.
 
+By using the template together with the actions, you can manage the drafting,
+acceptance, and recording of ADRs automatically.
+
 ### Issue template
 
 The best way to use the issue template is to copy it from
@@ -67,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: memorialize the APD
+      - name: memorialize the ADR
         uses: 18F/adr-automation/accepted@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -76,5 +79,5 @@ jobs:
 |name|description|default|required|
 |---|---|---|---|
 |repo-token|A GitHub token with permission to write issue comments on your repository||true|
-|label|The name of the issue label that indicates the issue is an ADR. This value is case sensitive!|`ADR`|false|
+|label|The name of the issue label that indicates that the ADR is accepted. This value is case sensitive!|`ADR: accepted`|false|
 |path|The path in your repor where ADRs should be written.|`docs/architecture/decisions/`|false|
