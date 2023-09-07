@@ -39,7 +39,7 @@ runs:
       shell: bash
       run: |
         mkdir -p ${{ inputs.path }}
-        LAST_ADR=$(ls ${{ inputs.path }}/*.md | grep -Eo "decisions/[0-9]+-" | sort | tail -n1 | grep -Eo "[0-9]+")
+        LAST_ADR=$(ls ${{ inputs.path }}/*.md | grep -Eo "/[0-9]+-" | sort | tail -n1 | grep -Eo "[0-9]+")
         LAST_ADR=$(echo "$LAST_ADR" | sed -E 's/^0+//')
         NEXT_ADR=$(($LAST_ADR + 1))
         NEXT_ADR=$(printf "%04i" "$NEXT_ADR")
@@ -73,7 +73,7 @@ runs:
       run: |
         BRANCH="adr/auto/${{ steps.next.outputs.number }}"
         git config --global user.email "tts@gsa.gov"
-        git config --global user.name "weather.gov ADR automation"
+        git config --global user.name "TTS ADR automation"
         git checkout -b $BRANCH
         git add ${{ inputs.path }}/*.md
         git commit -m "add ADR ${{ steps.next.outputs.number }}: ${{ github.event.issue.title }}"
