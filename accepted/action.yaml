@@ -26,6 +26,7 @@ runs:
   steps:
     - name: check for tags
       if: ${{ !contains(github.event.issue.labels.*.name, inputs.label )}}
+      shell: bash
       run: exit 0
 
     - name: checkout main branch
@@ -35,6 +36,7 @@ runs:
 
     - name: get ADR number
       id: next
+      shell: bash
       run: |
         mkdir -p ${{ inputs.path }}
         LAST_ADR=$(ls ${{ inputs.path }}/*.md | grep -Eo "decisions/[0-9]+-" | sort | tail -n1 | grep -Eo "[0-9]+")
@@ -44,6 +46,7 @@ runs:
         echo "number=$NEXT_ADR" >> "$GITHUB_OUTPUT"
 
     - name: write the ADR
+      shell: bash
       run: |
         SLUG=$(echo "${{ github.event.issue.title }}" | tr A-Z a-z)
         SLUG=$(echo "$SLUG" | iconv -c -t ascii//TRANSLIT)
@@ -64,6 +67,7 @@ runs:
         echo "${{ github.event.issue.body  }}" >> $FILENAME
 
     - name: branch, commit, and open PR
+      shell: bash
       env:
         GH_TOKEN: ${{ inputs.repo_token }}
       run: |
