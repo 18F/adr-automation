@@ -81,3 +81,4 @@ jobs:
 |repo-token|A GitHub token with permission to write issue comments on your repository||true|
 |label|The name of the issue label that indicates that the ADR is accepted. This value is case sensitive!|`ADR: accepted`|false|
 |path|The path in your repor where ADRs should be written.|`docs/architecture/decisions/`|false|
+|pr-label|The label to apply to the created pull reqeust. Set to `true` to re-use the issue label, `false` to not label the pull request, or a string to set a custom label.|`true`|false|

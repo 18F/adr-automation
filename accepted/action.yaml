@@ -14,6 +14,12 @@ inputs:
       The path in your repo where ADRs should be written. Defaults to
       docs/architecture/decisions/
     default: docs/architecture/decisions/
+  pr-label:
+    description: |
+      The label to apply to the created pull reqeust. Set to true to re-use the
+      issue label, false to not label the pull request, or a string to set a
+      custom label.
+    default: true
   repo-token:
     description: |
       A GitHub token with permission to read and create pull requests on your
@@ -80,6 +86,6 @@ runs:
         git push -f origin $BRANCH
         gh pr create \
           --title "Add ADR ${{ steps.next.outputs.number }} to the repo" \
-          --label "ADR" \
+          ${{ inputs.pr-label == false && '' || '--label "${{ inputs.pr-label == true && inputs.label || inputs.pr-label }}" \' }}
           --body "This pull request was opened automatically because #${{ github.event.issue.number }} was closed after being marked as an approved ADR. It contains a markdown file capturing the ADR body at the time the issue was closed. Please verify that the markdown is correct before merging!" || true
         gh pr merge $BRANCH --auto --squash || true
