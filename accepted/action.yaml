@@ -86,6 +86,6 @@ runs:
         git push -f origin $BRANCH
         gh pr create \
           --title "Add ADR ${{ steps.next.outputs.number }} to the repo" \
-          ${{ inputs.pr-label == false && '' || '--label "${{ inputs.pr-label == true && inputs.label || inputs.pr-label }}" \' }}
+          ${{ inputs.pr-label == false && '' || '--label "${{ inputs.pr-label == true && inputs.pr-label || inputs.pr-label }}" \' }}
           --body "This pull request was opened automatically because #${{ github.event.issue.number }} was closed after being marked as an approved ADR. It contains a markdown file capturing the ADR body at the time the issue was closed. Please verify that the markdown is correct before merging!" || true
         gh pr merge $BRANCH --auto --squash || true
