@@ -75,7 +75,7 @@ runs:
     - name: branch, commit, and open PR
       shell: bash
       env:
-        GH_TOKEN: ${{ inputs.repo_token }}
+        GITHUB_TOKEN: ${{ inputs.repo-token }}
       run: |
         BRANCH="adr/auto/${{ steps.next.outputs.number }}"
         git config --global user.email "tts@gsa.gov"
