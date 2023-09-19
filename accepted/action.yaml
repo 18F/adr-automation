@@ -54,23 +54,23 @@ runs:
     - name: write the ADR
       shell: bash
       run: |
-        SLUG=$(echo "${{ github.event.issue.title }}" | tr A-Z a-z)
-        SLUG=$(echo "$SLUG" | iconv -c -t ascii//TRANSLIT)
-        SLUG=$(echo "$SLUG" | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/-+/-/g' | sed -E 's/^-+|-+$//g')
+        SLUG=$(printf '%q\n' "${{ github.event.issue.title }}" | tr A-Z a-z)
+        SLUG=$(printf '%q\n' "$SLUG" | iconv -c -t ascii//TRANSLIT)
+        SLUG=$(printf '%q\n' "$SLUG" | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/-+/-/g' | sed -E 's/^-+|-+$//g')
 
         FILENAME="${{ inputs.path }}/${{ steps.next.outputs.number }}-$SLUG.md"
 
         DATE=$(date -I)
 
-        echo "# ${{ github.event.issue.title }}" > $FILENAME
-        echo "" >> $FILENAME
-        echo "Date: $DATE" >> $FILENAME
-        echo "" >> $FILENAME
-        echo "### Status" >> $FILENAME
-        echo "" >> $FILENAME
-        echo "Accepted" >> $FILENAME
-        echo "" >> $FILENAME
-        echo "${{ github.event.issue.body  }}" >> $FILENAME
+        printf '%q\n' "# ${{ github.event.issue.title }}" > $FILENAME
+        printf '%q\n' "" >> $FILENAME
+        printf '%q\n' "Date: $DATE" >> $FILENAME
+        printf '%q\n' "" >> $FILENAME
+        printf '%q\n' "### Status" >> $FILENAME
+        printf '%q\n' "" >> $FILENAME
+        printf '%q\n' "Accepted" >> $FILENAME
+        printf '%q\n' "" >> $FILENAME
+        printf '%q\n' "${{ github.event.issue.body  }}" >> $FILENAME
 
     - name: branch, commit, and open PR
       shell: bash
