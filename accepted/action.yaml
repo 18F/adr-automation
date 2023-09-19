@@ -51,26 +51,28 @@ runs:
         NEXT_ADR=$(printf "%04i" "$NEXT_ADR")
         echo "number=$NEXT_ADR" >> "$GITHUB_OUTPUT"
 
-    - name: write the ADR
+    - name: build filename
+      id: filename
       shell: bash
       run: |
-        SLUG=$(printf '%q' "${{ github.event.issue.title }}" | tr A-Z a-z)
-        SLUG=$(printf '%q' "$SLUG" | iconv -c -t ascii//TRANSLIT)
-        SLUG=$(printf '%q' "$SLUG" | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/-+/-/g' | sed -E 's/^-+|-+$//g')
+        SLUG=$(printf '%q\n' "${{ github.event.issue.title }}" | tr A-Z a-z)
+        SLUG=$(printf '%q\n' "$SLUG" | iconv -c -t ascii//TRANSLIT)
+        SLUG=$(printf '%q\n' "$SLUG" | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/-+/-/g' | sed -E 's/^-+|-+$//g')
 
         FILENAME="${{ inputs.path }}/${{ steps.next.outputs.number }}-$SLUG.md"
+        echo "filename=$FILENAME" >> "$GITHUB_OUTPUT"
 
-        DATE=$(date -I)
+    - name: write the ADR
+      uses: DamianReeves/write-file-action@master
+      with:
+        path: ${{ steps.filename.outputs.filename }}
+        write-mode: overwrite
+        contents: |
+          # ${{ github.event.issue.title }}
 
-        printf '%q' "# ${{ github.event.issue.title }}" > $FILENAME
-        printf '%q' "" >> $FILENAME
-        printf '%q' "Date: $DATE" >> $FILENAME
-        printf '%q' "" >> $FILENAME
-        printf '%q' "### Status" >> $FILENAME
-        printf '%q' "" >> $FILENAME
-        printf '%q' "Accepted" >> $FILENAME
-        printf '%q' "" >> $FILENAME
-        printf '%q' "${{ github.event.issue.body  }}" >> $FILENAME
+          ### Status: Accepted
+
+          ${{ github.event.issue.body }}
 
     - name: branch, commit, and open PR
       shell: bash
