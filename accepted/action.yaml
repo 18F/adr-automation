@@ -39,6 +39,8 @@ runs:
       uses: actions/checkout@v3
       with:
         ref: main
+        with:
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: get ADR number
       id: next
@@ -54,7 +56,7 @@ runs:
     - name: get date
       id: date
       shell: bash
-      run: echo "{date}={$(date +'%B %d, %Y')}" >> "$GITHUB_OUTPUT"
+      run: echo "date=$(date +'%B %d, %Y')" >> "$GITHUB_OUTPUT"
 
     - name: build filename
       id: filename
@@ -65,10 +67,11 @@ runs:
         SLUG=$(printf '%q\n' "$SLUG" | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/-+/-/g' | sed -E 's/^-+|-+$//g')
 
         FILENAME="${{ inputs.path }}/${{ steps.next.outputs.number }}-$SLUG.md"
+        echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
         echo "filename=$FILENAME" >> "$GITHUB_OUTPUT"
 
     - name: write the ADR
-      uses: DamianReeves/write-file-action@master
+      uses: DamianReeves/write-file-action@v1.2
       with:
         path: ${{ steps.filename.outputs.filename }}
         write-mode: overwrite
@@ -85,9 +88,9 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.repo-token }}
       run: |
-        BRANCH="adr/auto/${{ steps.next.outputs.number }}"
-        git config --global user.email "stvnrlly@users.noreply.github.com"
-        git config --global user.name "stvnrlly (as a bot)"
+        BRANCH="adr/auto/${{ steps.filename.outputs.slug }"
+        git config --global user.email "tts@gsa.gov"
+        git config --global user.name "TTS ADR Automation"
         git checkout -b $BRANCH
         git add ${{ inputs.path }}/*.md
         git commit -m "add ADR ${{ steps.next.outputs.number }}: ${{ github.event.issue.title }}"
@@ -96,4 +99,4 @@ runs:
         gh pr create \
           --title "Add ADR ${{ steps.next.outputs.number }} to the repo" \
           --body "This pull request was opened automatically because #${{ github.event.issue.number }} was closed after being marked as an approved ADR. It contains a markdown file capturing the ADR body at the time the issue was closed. Please verify that the markdown is correct before merging!" || true
-        gh pr merge $BRANCH --auto --squash || true
+        $ gh pr merge $BRANCH --auto --squash || true
