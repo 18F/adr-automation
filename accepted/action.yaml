@@ -88,7 +88,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.repo-token }}
       run: |
-        BRANCH="adr/auto/${{ steps.filename.outputs.slug }"
+        BRANCH="adr/auto/${{ steps.filename.outputs.slug }}"
         git config --global user.email "tts@gsa.gov"
         git config --global user.name "TTS ADR Automation"
         git checkout -b $BRANCH
